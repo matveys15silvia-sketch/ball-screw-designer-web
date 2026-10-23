@@ -1,0 +1,631 @@
+<!-- Сгенерировано tools/build_web.py из web/page.html — не редактировать. -->
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Ball Screw Designer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: инструмент инженера — карточки исходных данных слева, результаты справа; на телефоне одна колонка. */
+:root {
+  --bg: #f3f5f7; --surface: #ffffff; --surface-2: #e9edf1; --fg: #12171c; --fg-2: #4a5560; --muted: #7b8691;
+  --line: #d5dce3; --accent: #1d5fa7; --accent-fg: #ffffff; --focus: #1d5fa7;
+  --good: #0a7d0a; --good-bg: #e2f3e2; --warn: #8a5a00; --warn-bg: #fff1d1; --bad: #b42d2d; --bad-bg: #fbe1e1;
+  --nodata: #59626b; --nodata-bg: #e7eaed; --info-bg: #e4edf8;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --r: 6px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161a; --surface: #1a2026; --surface-2: #232b33; --fg: #e8edf2; --fg-2: #aab5bf; --muted: #7f8b96;
+  --line: #2f3943; --accent: #5c9be0; --accent-fg: #0d1216; --focus: #8bbcf0;
+  --good: #6fd36f; --good-bg: #1b3220; --warn: #f2c25b; --warn-bg: #3a2f14; --bad: #f08585; --bad-bg: #3d1f22;
+  --nodata: #b3bcc5; --nodata-bg: #2a3138; --info-bg: #1c2a3a;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #12161a; --surface: #1a2026; --surface-2: #232b33; --fg: #e8edf2; --fg-2: #aab5bf; --muted: #7f8b96;
+  --line: #2f3943; --accent: #5c9be0; --accent-fg: #0d1216; --focus: #8bbcf0;
+  --good: #6fd36f; --good-bg: #1b3220; --warn: #f2c25b; --warn-bg: #3a2f14; --bad: #f08585; --bad-bg: #3d1f22;
+  --nodata: #b3bcc5; --nodata-bg: #2a3138; --info-bg: #1c2a3a;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 14px; line-height: 1.45; }
+.wrap { max-width: 1400px; margin: 0 auto; padding-block: 16px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; font-weight: 600; }
+h1 { font-size: 1.6rem; letter-spacing: 0.01em; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+.num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+.muted { color: var(--fg-2); }
+.small { font-size: 12px; }
+header.top { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between;
+  border-bottom: 2px solid var(--fg); padding-bottom: 12px; margin-bottom: 16px; }
+.brand { display: grid; gap: 4px; min-width: 0; }
+.brand .eyebrow { font-family: var(--font-data); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+button, .btn, select, input { font: inherit; color: inherit; }
+.toolbar > select { border: 1px solid var(--line); background: var(--surface); padding: 7px 8px; border-radius: var(--r); max-width: 100%; }
+button, .btn { border: 1px solid var(--line); background: var(--surface); padding: 7px 12px; border-radius: var(--r); cursor: pointer; }
+button:hover, .btn:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; padding: 10px 16px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.btn input[type=file] { display: none; }
+
+.layout { display: grid; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.col { display: grid; gap: 12px; min-width: 0; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; min-width: 0; }
+details.card > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::after { content: "＋"; color: var(--muted); }
+details.card[open] > summary::after { content: "－"; }
+.card-title { font-family: var(--font-display); font-weight: 600; font-size: 0.98rem; }
+.fields { display: grid; gap: 8px; margin-top: 10px; }
+.field { display: grid; grid-template-columns: minmax(0, 1fr) 132px; gap: 8px; align-items: center; }
+.field label { color: var(--fg-2); font-size: 13px; }
+.field label .u { color: var(--muted); font-family: var(--font-data); font-size: 11px; }
+.field input, .field select { width: 100%; min-width: 0; padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--bg); font-family: var(--font-data); font-size: 13px; }
+.field select { font-family: var(--font-body); }
+.field.wide { grid-template-columns: minmax(0, 1fr); }
+.field input[aria-invalid="true"] { border: 2px solid var(--bad); }
+.field input::placeholder { color: var(--muted); font-family: var(--font-body); font-size: 12px; }
+.checks-row { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.checks-row label { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; }
+.phase-wrap { overflow-x: auto; margin-top: 6px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; font-size: 12px; color: var(--fg-2); }
+.phases input, .phases select { width: 100%; min-width: 58px; padding: 4px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); font-family: var(--font-data); font-size: 12px; }
+.phases td:first-child input { min-width: 110px; font-family: var(--font-body); }
+.calc-bar { position: sticky; bottom: 0; padding-block: 10px calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--bg); display: grid; gap: 8px; }
+.errors { border: 1px solid var(--bad); background: var(--bad-bg); color: var(--fg); border-radius: var(--r); padding: 10px 12px; }
+.errors ul { margin: 6px 0 0; padding-left: 18px; }
+
+.summary { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 4px 10px; font-size: 13px; border: 1px solid transparent; white-space: nowrap; }
+button.chip { cursor: pointer; }
+button.chip[aria-pressed="true"] { border-color: var(--fg); }
+.st-ok { background: var(--good-bg); color: var(--good); }
+.st-cond { background: var(--warn-bg); color: var(--warn); }
+.st-nodata { background: var(--nodata-bg); color: var(--nodata); }
+.st-bad { background: var(--bad-bg); color: var(--bad); }
+.st-info { background: var(--info-bg); color: var(--accent); }
+.chip b { font-family: var(--font-data); }
+.search { flex: 1 1 180px; min-width: 0; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+
+.assume li.crit { color: var(--warn); font-weight: 500; }
+.assume ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 4px; }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--fg-2); font-family: var(--font-data); font-size: 10px; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .zero { stroke: var(--muted); stroke-width: 1; }
+.chart .lbl { fill: var(--fg); font-family: var(--font-body); font-size: 11px; font-weight: 600; }
+
+.cand-list { display: grid; gap: 8px; }
+details.cand { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); min-width: 0; }
+details.cand > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: grid; gap: 6px; }
+details.cand > summary::-webkit-details-marker { display: none; }
+.cand-head { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; }
+.cand-head .art { font-family: var(--font-data); font-weight: 500; font-size: 14px; }
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 4px 12px; }
+.kv div { display: grid; min-width: 0; }
+.kv span:first-child { font-size: 11px; color: var(--muted); letter-spacing: 0.02em; }
+.kv span:last-child { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+.reason { font-size: 12.5px; color: var(--fg-2); overflow-wrap: anywhere; }
+.cand-body { border-top: 1px solid var(--line); padding: 10px 12px 14px; display: grid; gap: 12px; min-width: 0; }
+.tbl-wrap { overflow-x: auto; }
+.checks td:nth-child(3) { font-size: 12.5px; overflow-wrap: anywhere; min-width: 220px; }
+.checks td:first-child { white-space: nowrap; }
+.bar { display: grid; grid-template-columns: minmax(110px, 38%) minmax(0, 1fr) 64px; gap: 8px; align-items: center; font-size: 12px; }
+.bar .track { position: relative; height: 10px; background: var(--surface-2); border-radius: 3px; }
+.bar .fill { position: absolute; inset: 0 auto 0 0; border-radius: 3px; }
+.bar .limit { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--fg); }
+.bars { display: grid; gap: 6px; }
+td.num { white-space: nowrap; }
+@media (max-width: 600px) {
+  .checks thead { display: none; }
+  .checks tr { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .checks td { border: 0; padding: 0; }
+  .checks td:nth-child(3) { grid-column: 1 / -1; min-width: 0; }
+}
+.more { justify-self: center; }
+footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px; color: var(--fg-2); font-size: 12.5px; display: grid; gap: 6px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: var(--r); font-size: 13px; z-index: 20; }
+.empty { padding: 20px; text-align: center; color: var(--fg-2); }
+@media (prefers-reduced-motion: no-preference) { details.cand[open] .cand-body { animation: fade .15s ease-out; } }
+@keyframes fade { from { opacity: .4; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow">ШВП · подбор по HIWIN BS-08-2-EN-1704-K / DIN ISO 3408</span>
+      <h1>Ball Screw Designer</h1>
+      <span class="muted small" id="dbline"></span>
+    </div>
+    <div class="toolbar">
+      <select id="example" aria-label="Пример проекта"><option value="">Загрузить пример…</option></select>
+      <label class="btn">Открыть проект…<input type="file" id="openfile" accept=".json,application/json"></label>
+      <button type="button" id="copyproj">Копировать проект (JSON)</button>
+      <button type="button" id="reset">Сбросить</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <form class="col" id="form" novalidate>
+      <div id="cards" class="col"></div>
+      <div class="calc-bar">
+        <div id="errors" class="errors" hidden></div>
+        <button type="submit" class="primary" id="calc">▶ Рассчитать и подобрать</button>
+      </div>
+    </form>
+
+    <main class="col" id="results">
+      <section class="card" id="summary-card">
+        <div class="summary" id="summary"></div>
+        <div class="summary" style="margin-top:10px">
+          <input class="search" id="search" type="search" placeholder="Поиск по артикулу или серии" aria-label="Поиск">
+          <button type="button" id="copycsv">Копировать таблицу (CSV)</button>
+        </div>
+      </section>
+      <details class="card assume" id="assume-card" open>
+        <summary><span class="card-title">Допущения расчёта</span><span class="muted small" id="assume-count"></span></summary>
+        <ul id="assume"></ul>
+      </details>
+      <section class="card">
+        <div class="card-title">Цикл движения и осевая сила</div>
+        <div id="cycle-chart"></div>
+        <div class="tbl-wrap"><table class="small" id="phase-table"></table></div>
+      </section>
+      <section class="cand-list" id="cands"></section>
+      <button type="button" class="more" id="more" hidden>Показать ещё</button>
+    </main>
+  </div>
+
+  <footer>
+    <div><b>Статусы:</b> ✔ Подходит — все обязательные проверки пройдены без замечаний; ◐ Условно подходит — пройдены, но есть допущения или сомнительные данные; ? Недостаточно данных — обязательную проверку выполнить нельзя; ✖ Не подходит — нарушено ограничение.</div>
+    <div>Веб-версия считает тем же расчётным ядром, что и настольная программа (порт на JavaScript, совпадение проверяется автоматически на всех позициях базы). PDF-отчёт, сохранение файлов проекта, импорт изделий и графики запасов в отдельной вкладке есть в настольной версии. Исходные данные этой страницы сохраняются только в вашем браузере.</div>
+    <div>Расчёт предварительный. Сравнение с официальным калькулятором HIWIN не выполнялось. Не учитываются опорные подшипники, тепловое удлинение, радиальные нагрузки, длина цапф. Каталог 2017 года — значения подтверждайте у производителя.</div>
+  </footer>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="core.js"></script>
+<script src="products.js"></script>
+<script src="examples.js"></script>
+<script>
+(function () {
+  "use strict";
+  const BSDc = window.BSD, DB = window.BSD_DB || { products: [], sources: [] }, EXAMPLES = window.BSD_EXAMPLES || {};
+  const PRODUCTS = DB.products;
+  const $ = (s, el) => (el || document).querySelector(s);
+  const esc = (s) => String(s === null || s === undefined ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const fmt = BSDc.fmt, g = BSDc.g;
+  const STORE = "bsd-web-input-v1";
+
+  // поле, подпись, единица, необязательное
+  const GROUPS = [
+    ["Ось и нагрузка", true, [
+      ["moving_mass_kg", "Масса перемещаемого узла", "кг", false],
+      ["process_force_N", "Технологическая сила (на подаче)", "Н", true],
+      ["friction_coefficient", "Коэффициент трения направляющих μ", "", true],
+      ["guide_resistance_N", "Сопротивление уплотнений", "Н", true]]],
+    ["Кинематика и цикл", true, [
+      ["stroke_mm", "Полезный ход", "мм", false],
+      ["rapid_speed_m_min", "Быстрое перемещение", "м/мин", false],
+      ["acceleration_m_s2", "Ускорение", "м/с²", false],
+      ["feed_speed_mm_min", "Рабочая подача", "мм/мин", true],
+      ["feed_stroke_fraction", "Доля хода на подаче (0…1)", "", false],
+      ["dwell_time_s", "Стоянка в цикле", "с", false]]],
+    ["Опоры и геометрия", true, [
+      ["unsupported_length_mm", "Свободная длина винта ls", "мм", false],
+      ["thread_margin_mm", "Запас длины резьбы (перебеги)", "мм", false]]],
+    ["Ресурс и запасы", true, [
+      ["required_life_h", "Требуемый ресурс", "ч", false],
+      ["operating_factor_fp", "Коэффициент условий работы fp", "", false],
+      ["static_safety_required", "Требуемый статический запас S0", "", false],
+      ["preload_percent", "Натяг (0 — без натяга)", "% Cdyn", false]]],
+    ["Привод", false, [
+      ["efficiency_forward", "КПД прямого хода η1", "", false],
+      ["efficiency_reverse", "КПД обратного хода η2", "", false],
+      ["gear_ratio", "Передаточное отношение nдв/nвинта", "", false],
+      ["bearing_friction_torque_Nm", "Момент трения опор Tb", "Н·м", true],
+      ["motor_inertia_kgm2", "Инерция ротора", "кг·м²", true],
+      ["motor_rated_torque_Nm", "Номинальный момент двигателя", "Н·м", true],
+      ["motor_peak_torque_Nm", "Максимальный момент двигателя", "Н·м", true],
+      ["motor_max_speed_rpm", "Макс. частота двигателя", "об/мин", true]]],
+    ["Требования", false, [
+      ["max_backlash_mm", "Допустимый осевой люфт", "мм", true],
+      ["required_v300p_um", "Допустимое отклонение хода v300p", "мкм", true],
+      ["required_rigidity_N_um", "Требуемая осевая жёсткость ШВП", "Н/мкм", true],
+      ["max_nut_diameter_mm", "Макс. диаметр гайки/фланца", "мм", true],
+      ["max_nut_length_mm", "Макс. длина гайки", "мм", true]]],
+    ["Фильтр каталога", false, [
+      ["diameter_min_mm", "Диаметр от", "мм", true], ["diameter_max_mm", "Диаметр до", "мм", true],
+      ["lead_min_mm", "Шаг от", "мм", true], ["lead_max_mm", "Шаг до", "мм", true]]],
+  ];
+  const LABELS = {};
+  GROUPS.forEach((gr) => gr[2].forEach((f) => (LABELS[f[0]] = f[1])));
+  const MFG = { rolled: "накатанные", peeled: "точёные", ground: "шлифованные" };
+  const STATUS_CLASS = { "Подходит": "st-ok", "Условно подходит": "st-cond", "Недостаточно данных": "st-nodata", "Не подходит": "st-bad" };
+  const CHECK_CLASS = { "пройдено": "st-ok", "пройдено с замечанием": "st-cond", "не пройдено": "st-bad", "не проверено": "st-nodata", "справочно": "st-info" };
+  const CHECK_SYM = { "пройдено": "✔", "пройдено с замечанием": "◐", "не пройдено": "✖", "не проверено": "?", "справочно": "i" };
+  const HIGHER_IS_BETTER = new Set(["static", "life", "rigidity"]);
+
+  // ---------- построение формы ----------
+  function fieldHtml(name, label, unit, optional) {
+    return `<div class="field"><label for="f_${name}">${esc(label)}${unit ? ` <span class="u">${esc(unit)}</span>` : ""}</label>` +
+      `<input id="f_${name}" name="${name}" type="text" inputmode="decimal" autocomplete="off" placeholder="${optional ? "не задано" : "обязательно"}"></div>`;
+  }
+  function selectHtml(name, label, opts) {
+    return `<div class="field"><label for="f_${name}">${esc(label)}</label><select id="f_${name}" name="${name}">` +
+      opts.map(([v, t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join("") + `</select></div>`;
+  }
+  function buildForm() {
+    let h = `<section class="card"><div class="card-title">Проект</div><div class="fields">
+      <div class="field wide"><input id="f_name" name="name" type="text" aria-label="Название оси" placeholder="Название оси"></div>
+      ${selectHtml("orientation", "Ориентация оси", [["horizontal", "Горизонтальная"], ["vertical", "Вертикальная"]])}
+      ${selectHtml("mounting", "Схема опор", Object.entries(BSDc.MOUNTING_RU))}
+    </div></section>`;
+    GROUPS.forEach(([title, open, fields]) => {
+      h += `<details class="card" ${open ? "open" : ""}><summary><span class="card-title">${esc(title)}</span>` +
+        `<span class="muted small">${open ? "" : "необязательно"}</span></summary><div class="fields">`;
+      fields.forEach((f) => (h += fieldHtml(...f)));
+      if (title === "Ресурс и запасы")
+        h += selectHtml("reliability_percent", "Надёжность (табл. 3.17)", Object.entries(BSDc.RELIABILITY_FACTORS).map(([k, v]) => [k, `${k} % (fr = ${v})`]));
+      if (title === "Кинематика и цикл") {
+        h += selectHtml("cycle_mode", "Цикл движения", [["auto", "Автоматический"], ["manual", "Ручной (таблица фаз)"]]);
+        h += `<div id="phase-editor" hidden><div class="phase-wrap"><table class="phases"><thead><tr><th>Фаза</th><th>Напр.</th><th>v нач, м/мин</th><th>v кон, м/мин</th><th>t, с</th><th>F тех, Н</th><th></th></tr></thead><tbody id="phase-body"></tbody></table></div>
+          <div class="toolbar" style="margin-top:6px"><button type="button" id="ph-add">Добавить фазу</button><button type="button" id="ph-auto">Заполнить из авто-цикла</button></div>
+          <p class="muted small" style="margin:6px 0 0">Напр.: +1 вперёд/вверх, −1 назад/вниз, 0 стоянка. Скорости — модули.</p></div>`;
+      }
+      if (title === "Фильтр каталога") {
+        h += `<div class="field wide"><span class="muted small">Исполнение</span><div class="checks-row">` +
+          Object.entries(MFG).map(([k, t]) => `<label><input type="checkbox" name="mfg" value="${k}" checked> ${t}</label>`).join("") + `</div></div>`;
+      }
+      h += `</div></details>`;
+    });
+    $("#cards").innerHTML = h;
+  }
+
+  function phaseRow(p) {
+    const tr = document.createElement("tr");
+    const dsel = [[1, "+1"], [-1, "−1"], [0, "0"]].map(([v, t]) => `<option value="${v}" ${p.direction === v ? "selected" : ""}>${t}</option>`).join("");
+    tr.innerHTML = `<td><input data-k="name" value="${esc(p.name)}" aria-label="Название фазы"></td>
+      <td><select data-k="direction" aria-label="Направление">${dsel}</select></td>
+      <td><input data-k="v_start_m_min" inputmode="decimal" value="${g(p.v_start_m_min)}" aria-label="Скорость в начале"></td>
+      <td><input data-k="v_end_m_min" inputmode="decimal" value="${g(p.v_end_m_min)}" aria-label="Скорость в конце"></td>
+      <td><input data-k="duration_s" inputmode="decimal" value="${g(p.duration_s)}" aria-label="Длительность"></td>
+      <td><input data-k="process_force_N" inputmode="decimal" value="${g(p.process_force_N)}" aria-label="Технологическая сила"></td>
+      <td><button type="button" class="ph-del" aria-label="Удалить фазу">✕</button></td>`;
+    return tr;
+  }
+  function setPhases(list) {
+    const body = $("#phase-body");
+    body.innerHTML = "";
+    list.forEach((p) => body.appendChild(phaseRow(p)));
+  }
+  function parseNum(s) {
+    const t = String(s).trim().replace(/\s/g, "").replace(",", ".");
+    if (t === "") return null;
+    const v = Number(t);
+    return isFinite(v) ? v : NaN;
+  }
+  function readPhases(errors) {
+    return [...$("#phase-body").rows].map((tr, i) => {
+      const get = (k) => tr.querySelector(`[data-k="${k}"]`).value;
+      const p = { name: get("name") || `Фаза ${i + 1}`, direction: Number(get("direction")) };
+      ["v_start_m_min", "v_end_m_min", "duration_s", "process_force_N"].forEach((k) => {
+        const v = parseNum(get(k));
+        if (Number.isNaN(v)) errors.push(["manual_phases", `Таблица фаз, строка ${i + 1}: «${get(k)}» не число`]);
+        p[k] = v === null || Number.isNaN(v) ? 0 : v;
+      });
+      return p;
+    });
+  }
+
+  function setInput(inp) {
+    inp = BSDc.normalizeInput(inp);
+    $("#f_name").value = inp.name || "";
+    ["orientation", "mounting", "reliability_percent", "cycle_mode"].forEach((k) => ($(`#f_${k}`).value = String(inp[k])));
+    Object.keys(LABELS).forEach((k) => {
+      const el = $(`#f_${k}`);
+      el.value = inp[k] === null || inp[k] === undefined ? "" : g(inp[k]);
+      el.removeAttribute("aria-invalid");
+    });
+    document.querySelectorAll('input[name="mfg"]').forEach((cb) => (cb.checked = !inp.manufacturing_types.length || inp.manufacturing_types.includes(cb.value)));
+    setPhases(inp.manual_phases);
+    $("#phase-editor").hidden = inp.cycle_mode !== "manual";
+  }
+  function getInput() {
+    const errors = [];
+    const inp = { name: $("#f_name").value.trim() || "Ось", orientation: $("#f_orientation").value, mounting: $("#f_mounting").value,
+      reliability_percent: Number($("#f_reliability_percent").value), cycle_mode: $("#f_cycle_mode").value };
+    Object.keys(LABELS).forEach((k) => {
+      const v = parseNum($(`#f_${k}`).value);
+      if (Number.isNaN(v)) errors.push([k, `«${LABELS[k]}»: «${$(`#f_${k}`).value}» не является числом`]);
+      inp[k] = Number.isNaN(v) ? null : v;
+    });
+    const phases = readPhases(inp.cycle_mode === "manual" ? errors : []);
+    inp.manual_phases = phases;
+    const mfg = [...document.querySelectorAll('input[name="mfg"]:checked')].map((c) => c.value);
+    if (!mfg.length) errors.push(["mfg", "Не выбрано ни одного исполнения ШВП"]);
+    inp.manufacturing_types = mfg.length === 3 ? [] : mfg;
+    inp.manufacturers = [];
+    return { inp, errors };
+  }
+
+  // ---------- графики ----------
+  function stepChart(series, opts) {
+    // series: [{label, color, pts:[[t,v],...]}] — малые кратные с общей осью времени
+    const W = 640, padL = 46, padR = 10, rowH = 92, gap = 18, top = 16;
+    const H = top + series.length * (rowH + gap) + 18;
+    const tMax = Math.max(1e-9, ...series.flatMap((s) => s.pts.map((p) => p[0])));
+    const x = (t) => padL + (W - padL - padR) * t / tMax;
+    let svg = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria)}">`;
+    series.forEach((s, i) => {
+      const y0 = top + i * (rowH + gap);
+      const vals = s.pts.map((p) => p[1]);
+      let lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
+      if (hi - lo < 1e-9) { hi += 1; lo -= 1; }
+      const pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
+      const y = (v) => y0 + rowH - (v - lo) / (hi - lo) * rowH;
+      [hi - pad, (hi + lo) / 2, lo + pad].forEach((v) => {
+        svg += `<line class="grid" x1="${padL}" x2="${W - padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>` +
+          `<text x="${padL - 4}" y="${(y(v) + 3).toFixed(1)}" text-anchor="end">${esc(compact(v))}</text>`;
+      });
+      svg += `<line class="zero" x1="${padL}" x2="${W - padR}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}"/>`;
+      svg += `<text class="lbl" x="${padL}" y="${y0 - 4}">${esc(s.label)}</text>`;
+      svg += `<polyline fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" points="${s.pts.map((p) => `${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join(" ")}"/>`;
+    });
+    const yb = H - 4;
+    [0, 0.25, 0.5, 0.75, 1].forEach((f) => (svg += `<text x="${x(f * tMax).toFixed(1)}" y="${yb}" text-anchor="middle">${(f * tMax).toFixed(1)}</text>`));
+    svg += `<text x="${W - padR}" y="${yb - 12}" text-anchor="end">время, с</text></svg>`;
+    return svg;
+  }
+  function compact(v) {
+    const a = Math.abs(v);
+    if (a >= 1000) return (v / 1000).toFixed(a >= 10000 ? 0 : 1) + "k";
+    if (a >= 10) return v.toFixed(0);
+    return v.toFixed(a >= 1 ? 1 : 2);
+  }
+  function cycleSeries(r, cand) {
+    const sp = [], fp = [];
+    let t = 0;
+    r.loads.forEach((ld) => {
+      const p = ld.phase, d = p.direction;
+      sp.push([t, d * p.v_start_m_min], [t + p.duration_s, d * p.v_end_m_min]);
+      fp.push([t, ld.force_N], [t + p.duration_s, ld.force_N]);
+      t += p.duration_s;
+    });
+    const out = [{ label: "Скорость стола, м/мин", color: "var(--s1)", pts: sp }, { label: "Осевая сила, Н", color: "var(--s2)", pts: fp }];
+    if (cand) {
+      const tp = []; t = 0;
+      cand.values.torque.phases.forEach((p) => { tp.push([t, p.torque_motor_Nm], [t + p.duration_s, p.torque_motor_Nm]); t += p.duration_s; });
+      out.push({ label: `Момент двигателя (${cand.product.article}), Н·м`, color: "var(--s3)", pts: tp });
+    }
+    return out;
+  }
+
+  // ---------- результаты ----------
+  let RESULT = null, FILTER = null, SHOWN = 40;
+
+  function renderSummary(r) {
+    const order = ["Подходит", "Условно подходит", "Недостаточно данных", "Не подходит"];
+    const sym = BSDc.STATUS_SYMBOL;
+    $("#summary").innerHTML = `<span class="muted">${esc(r.input.name)}: проверено <b class="num">${r.candidates.length}</b> из <span class="num">${r.catalog_size}</span>` +
+      (r.excluded_by_filter ? ` (фильтром исключено ${r.excluded_by_filter})` : "") + `</span>` +
+      `<button type="button" class="chip" data-f="" aria-pressed="${FILTER === null}">Все</button>` +
+      order.map((s) => `<button type="button" class="chip ${STATUS_CLASS[s]}" data-f="${esc(s)}" aria-pressed="${FILTER === s}">${sym[s]} ${s} <b>${r.counts[s]}</b></button>`).join("");
+    $("#summary").querySelectorAll("button.chip").forEach((b) => b.addEventListener("click", () => {
+      FILTER = b.dataset.f || null; SHOWN = 40; renderSummary(RESULT); renderCands();
+    }));
+  }
+  function renderAssumptions(r) {
+    const nCrit = r.assumptions.filter((a) => isCritical(a)).length;
+    $("#assume-count").textContent = `${r.assumptions.length}${nCrit ? `, влияют на статус: ${nCrit}` : ""}`;
+    $("#assume").innerHTML = r.assumptions.map((a) => `<li class="${isCritical(a) ? "crit" : ""}">${isCritical(a) ? "◐ " : ""}${esc(a)}</li>`).join("");
+  }
+  function isCritical(a) { return /принята равной 0 Н|трение принято равным 0/.test(a); }
+  function renderCycle(r, cand) {
+    $("#cycle-chart").innerHTML = stepChart(cycleSeries(r, cand), { aria: "График цикла: скорость, осевая сила и момент по времени" });
+    $("#phase-table").innerHTML = `<thead><tr><th>Фаза</th><th>Напр.</th><th>t, с</th><th>v, м/мин</th><th>путь, мм</th><th>Fa, Н</th></tr></thead><tbody>` +
+      r.loads.map((ld) => { const p = ld.phase; return `<tr><td>${esc(p.name)}</td><td class="num">${p.direction > 0 ? "+1" : p.direction < 0 ? "−1" : "0"}</td>` +
+        `<td class="num">${p.duration_s.toFixed(3)}</td><td class="num">${g(p.v_start_m_min)}–${g(p.v_end_m_min)}</td>` +
+        `<td class="num">${fmt(BSDc.distance(p))}</td><td class="num">${fmt(ld.force_N)}</td></tr>`; }).join("") + `</tbody>`;
+  }
+  function visibleCands() {
+    const q = $("#search").value.trim().toLowerCase();
+    return RESULT.candidates.filter((c) => (FILTER === null || c.status === FILTER) &&
+      (!q || c.product.article.toLowerCase().includes(q) || c.product.series.toLowerCase().includes(q)));
+  }
+  function candSummary(c) {
+    const p = c.product, v = c.values;
+    return `<summary><div class="cand-head"><span class="chip ${STATUS_CLASS[c.status]}">${BSDc.STATUS_SYMBOL[c.status]} ${esc(c.status)}</span>` +
+      `<span class="art">${esc(p.manufacturer)} ${esc(p.article)}</span><span class="muted small">${esc(p.series)}</span></div>` +
+      `<div class="kv"><div><span>d × P, мм</span><span>${g(p.nominal_diameter_mm)} × ${g(p.lead_mm)}</span></div>` +
+      `<div><span>C / C0, Н</span><span>${fmt(p.dynamic_load_N)} / ${fmt(p.static_load_N)}</span></div>` +
+      `<div><span>n max, об/мин</span><span>${fmt(v.n_max_rpm)}</span></div>` +
+      `<div><span>Ресурс, ч</span><span>${fmt(v.life_h)}</span></div>` +
+      `<div><span>Ресурс, км</span><span>${fmt(v.life_km)}</span></div>` +
+      `<div><span>S0</span><span>${fmt(v.s0, 2)}</span></div></div>` +
+      `<div class="reason">${esc(c.summary.length > 260 ? c.summary.slice(0, 260) + "…" : c.summary)}</div></summary>`;
+  }
+  function checkText(c) {
+    const parts = [];
+    const nd = (x) => (Math.abs(x) < 10 ? 2 : 0);
+    if (c.value !== null && c.limit !== null) parts.push(`${fmt(c.value, nd(c.value))} / предел ${fmt(c.limit, nd(c.limit))} ${c.unit}`.trim());
+    else if (c.value !== null) parts.push(`${fmt(c.value, nd(c.value))} ${c.unit}`.trim());
+    if (c.explanation) parts.push(c.explanation);
+    return parts.join(" — ");
+  }
+  function utilBars(c) {
+    const rows = c.checks.filter((k) => k.value !== null && k.limit !== null && k.state !== "справочно").map((k) => {
+      let u;
+      if (HIGHER_IS_BETTER.has(k.key)) u = k.value > 0 && isFinite(k.value) ? k.limit / k.value : 0;
+      else u = k.limit ? k.value / k.limit : Infinity;
+      return [k.title, u, k.state];
+    });
+    const scale = 1.5;
+    return `<div class="bars" aria-label="Коэффициенты использования">` + rows.map(([t, u, st]) => {
+      const w = Math.min(u, scale) / scale * 100;
+      const col = st === "не пройдено" ? "var(--bad)" : st === "пройдено с замечанием" ? "var(--warn)" : "var(--good)";
+      return `<div class="bar"><span>${esc(t)}</span><span class="track"><span class="fill" style="width:${w.toFixed(1)}%;background:${col}"></span>` +
+        `<span class="limit" style="left:${(100 / scale).toFixed(1)}%"></span></span><span class="num">${CHECK_SYM[st]} ${isFinite(u) ? u.toFixed(2) : "∞"}</span></div>`;
+    }).join("") + `</div><div class="muted small">Коэффициент использования: значение / предел (для ресурса, S0 и жёсткости — предел / значение). Черта — предел 1.0.</div>`;
+  }
+  function candBody(c) {
+    const p = c.product, v = c.values, s = p.source || {};
+    const reasons = c.reasons.length ? `<ul>${c.reasons.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p>Все обязательные проверки пройдены.</p>`;
+    const life = "life_h" in v ? `<p class="small"><b>Ресурс:</b> Fbm1 = ${fmt(v.fbm1_N)} Н, Fbm2 = ${fmt(v.fbm2_N)} Н; с учётом надёжности ${fmt(v.life_km)} км, ${fmt(v.life_h)} ч работы в цикле (${fmt(v.life_motion_h)} ч движения); nm = ${v.nm_rpm.toFixed(1)} об/мин` +
+      (v.c_required_N ? `; требуемая Cdyn ≈ ${fmt(v.c_required_N)} Н` : "") + `.</p>` : "";
+    const drive = `<p class="small"><b>Привод:</b> пиковый момент ${v.torque_peak_Nm.toFixed(2)} Н·м, RMS ${v.torque_rms_Nm.toFixed(2)} Н·м, мощность ${fmt(v.power_peak_W)} Вт, приведённая инерция ${v.j_total_motor_kgm2.toExponential(3)} кг·м².</p>`;
+    const checks = `<div class="tbl-wrap"><table class="checks"><thead><tr><th>Состояние</th><th>Проверка</th><th>Значение / пояснение</th></tr></thead><tbody>` +
+      c.checks.map((k) => `<tr><td><span class="chip ${CHECK_CLASS[k.state]}">${CHECK_SYM[k.state]} ${esc(k.state)}</span></td>` +
+        `<td>${esc(k.title)}${k.mandatory ? " <span class=\"muted small\">(обяз.)</span>" : ""}</td>` +
+        `<td>${esc(checkText(k))}${k.reference ? `<div class="muted small">${esc(k.reference)}</div>` : ""}</td></tr>`).join("") + `</tbody></table></div>`;
+    const notes = (p.data_warnings || []).map((w) => `<li><b>⚠ ${esc(w)}</b></li>`).concat((p.notes || []).map((n) => `<li>${esc(n)}</li>`)).join("");
+    return `<div class="cand-body"><div><b>Основание статуса</b>${reasons}</div>
+      <p class="small muted">${esc(p.nut_form)}. dk = ${fmt(p.root_diameter_mm, 2)} мм, шарик ${p.ball_diameter_mm ? g(p.ball_diameter_mm) + " мм" : "—"}, жёсткость гайки ${fmt(p.nut_rigidity_N_um)} Н/мкм, зазор ${p.max_axial_play_mm === null ? "—" : g(p.max_axial_play_mm) + " мм"}, длина гайки ${fmt(p.nut_length_mm)} мм, фланец ${fmt(p.flange_diameter_mm)} мм.</p>
+      ${life}${drive}<div>${utilBars(c)}</div>${checks}
+      <div class="small"><b>Источник данных:</b> ${esc(s.document || "")}, ${esc(s.table || "")}${s.page ? `, стр. ${s.page}` : ""}${s.accessed ? `, проверено ${esc(s.accessed)}` : ""}. ${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">PDF каталога</a>` : ""}</div>
+      ${notes ? `<ul class="small">${notes}</ul>` : ""}
+      <button type="button" class="show-torque">Показать момент этого кандидата на графике цикла</button></div>`;
+  }
+  function renderCands() {
+    const list = visibleCands();
+    const box = $("#cands");
+    if (!list.length) { box.innerHTML = `<div class="card empty">Нет кандидатов с выбранным статусом.</div>`; $("#more").hidden = true; return; }
+    box.innerHTML = list.slice(0, SHOWN).map((c) => `<details class="cand" data-id="${esc(c.product.id)}">${candSummary(c)}</details>`).join("");
+    $("#more").hidden = list.length <= SHOWN;
+    $("#more").textContent = `Показать ещё (${list.length - SHOWN})`;
+  }
+
+  function calculate(scroll) {
+    const { inp, errors } = getInput();
+    document.querySelectorAll(".field input").forEach((el) => el.removeAttribute("aria-invalid"));
+    let r = null, errs = errors;
+    if (!errs.length) {
+      try { r = BSDc.select(PRODUCTS, inp); } catch (e) { errs = e.errors || [["", e.message]]; }
+    }
+    const eb = $("#errors");
+    if (errs.length) {
+      errs.forEach(([k]) => { const el = $(`#f_${k}`); if (el) { el.setAttribute("aria-invalid", "true"); const d = el.closest("details"); if (d) d.open = true; } });
+      eb.innerHTML = `<b>Исправьте исходные данные:</b><ul>${errs.map((e) => `<li>${esc(e[1])}</li>`).join("")}</ul>`;
+      eb.hidden = false;
+      const first = errs.map(([k]) => $(`#f_${k}`)).find(Boolean);
+      if (first) first.focus();
+      return;
+    }
+    eb.hidden = true;
+    RESULT = r; SHOWN = 40;
+    renderSummary(r); renderAssumptions(r); renderCycle(r, null); renderCands();
+    save(inp);
+    if (scroll && window.matchMedia("(max-width: 900px)").matches) $("#results").scrollIntoView({ behavior: "smooth" });
+  }
+
+  // ---------- хранение, проекты ----------
+  function save(inp) { try { localStorage.setItem(STORE, JSON.stringify(inp)); } catch (e) { /* хранилище недоступно */ } }
+  function load() { try { const s = localStorage.getItem(STORE); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+  function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => (t.hidden = true), 2600); }
+  async function copyText(text, okMsg) {
+    try { await navigator.clipboard.writeText(text); toast(okMsg); }
+    catch (e) {
+      const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); toast(okMsg); } catch (e2) { toast("Не удалось скопировать — выделите текст вручную"); }
+      ta.remove();
+    }
+  }
+  function projectJson(inp) {
+    return JSON.stringify({ format: "ball-screw-designer-project", version: 1, saved: new Date().toISOString().slice(0, 19), notes: "Создано в веб-версии", input: inp }, null, 2);
+  }
+  function csv(r) {
+    const head = ["Статус", "Производитель", "Серия", "Артикул", "d, мм", "P, мм", "dk, мм", "C, Н", "C0, Н", "n max, об/мин", "S0", "Ресурс, км", "Ресурс, ч", "Момент пик, Н·м", "Причины / замечания"];
+    const num = (x, nd) => (x === null || x === undefined ? "" : !isFinite(x) ? "inf" : x.toFixed(nd).replace(".", ","));
+    const q = (s) => `"${String(s).replace(/"/g, '""')}"`;
+    return [head.join(";")].concat(r.candidates.map((c) => { const p = c.product, v = c.values;
+      return [c.status, p.manufacturer, p.series, p.article, num(p.nominal_diameter_mm, 0), num(p.lead_mm, 2), num(p.root_diameter_mm, 3),
+        num(p.dynamic_load_N, 0), num(p.static_load_N, 0), num(v.n_max_rpm, 0), num(v.s0, 2), num(v.life_km, 0), num(v.life_h, 0),
+        num(v.torque_peak_Nm, 3), q(c.summary)].join(";"); })).join("\n");
+  }
+
+  // ---------- запуск ----------
+  buildForm();
+  $("#dbline").textContent = `База: ${PRODUCTS.length} позиций HIWIN с источником и страницей каталога. ` +
+    ((DB.sources || []).some((s) => /недоступен/.test(s.status || "")) ? "KR Automation: сайт был недоступен, данные не включены." : "");
+  Object.entries(EXAMPLES).forEach(([k, v]) => { const o = document.createElement("option"); o.value = k; o.textContent = v.input.name; $("#example").appendChild(o); });
+  const firstExample = Object.values(EXAMPLES)[0];
+  setInput(load() || (firstExample ? firstExample.input : BSDc.DEFAULT_INPUT));
+  calculate(false);
+
+  $("#form").addEventListener("submit", (e) => { e.preventDefault(); calculate(true); });
+  $("#f_cycle_mode").addEventListener("change", (e) => {
+    const manual = e.target.value === "manual";
+    $("#phase-editor").hidden = !manual;
+    if (manual && !$("#phase-body").rows.length) fillAuto();
+  });
+  function fillAuto() {
+    const { inp } = getInput();
+    inp.cycle_mode = "auto";
+    const errs = BSDc.validateInput(BSDc.normalizeInput(inp)).filter((e) => e[0] !== "manual_phases");
+    if (errs.length) { toast("Сначала исправьте поля кинематики"); return; }
+    setPhases(BSDc.buildCycle(BSDc.normalizeInput(inp)));
+  }
+  document.addEventListener("click", (e) => {
+    if (e.target.id === "ph-add") $("#phase-body").appendChild(phaseRow({ name: "Фаза", direction: 1, v_start_m_min: 0, v_end_m_min: 0, duration_s: 1, process_force_N: 0 }));
+    if (e.target.id === "ph-auto") fillAuto();
+    if (e.target.classList.contains("ph-del")) e.target.closest("tr").remove();
+    if (e.target.classList.contains("show-torque")) {
+      const id = e.target.closest("details.cand").dataset.id;
+      const c = RESULT.candidates.find((x) => x.product.id === id);
+      renderCycle(RESULT, c);
+      $("#cycle-chart").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+  $("#cands").addEventListener("toggle", (e) => {
+    const d = e.target;
+    if (d.tagName !== "DETAILS" || !d.open || d.querySelector(".cand-body")) return;
+    const c = RESULT.candidates.find((x) => x.product.id === d.dataset.id);
+    d.insertAdjacentHTML("beforeend", candBody(c));
+  }, true);
+  $("#more").addEventListener("click", () => { SHOWN += 40; renderCands(); });
+  $("#search").addEventListener("input", () => { SHOWN = 40; renderCands(); });
+  $("#example").addEventListener("change", (e) => { const ex = EXAMPLES[e.target.value]; if (ex) { setInput(ex.input); calculate(true); toast(`Загружен пример: ${ex.input.name}`); } e.target.value = ""; });
+  $("#reset").addEventListener("click", () => { setInput(BSDc.DEFAULT_INPUT); calculate(false); toast("Исходные данные сброшены к значениям по умолчанию"); });
+  $("#copyproj").addEventListener("click", () => copyText(projectJson(getInput().inp), "Проект скопирован. Сохраните текст в файл .bsd.json — он откроется в настольной версии."));
+  $("#copycsv").addEventListener("click", () => RESULT && copyText(csv(RESULT), "Таблица скопирована (CSV, разделитель «;»)"));
+  $("#openfile").addEventListener("change", (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const d = JSON.parse(rd.result);
+        if (d.format !== "ball-screw-designer-project" || !d.input) throw new Error("Файл не является проектом Ball Screw Designer");
+        setInput(d.input); calculate(true); toast(`Открыт проект: ${f.name}`);
+      } catch (err) { toast(`Не удалось открыть: ${err.message}`); }
+    };
+    rd.readAsText(f, "utf-8");
+    e.target.value = "";
+  });
+})();
+</script>
+
+</body>
+</html>
