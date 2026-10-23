@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ball Screw Designer — настольная версия</title>
+<style>
+:root{--bg:#f7f7f5;--fg:#1d1d1b;--muted:#5d5c58;--card:#fff;--line:#e2e1dc;--acc:#2a5db0}
+@media (prefers-color-scheme:dark){:root{--bg:#1a1a19;--fg:#ecebe6;--muted:#a3a29c;--card:#242422;--line:#3a3936;--acc:#7aa7f0}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem;margin:.2em 0}
+p{color:var(--muted)}
+a{color:var(--acc)}
+figure{margin:0 0 20px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}
+figcaption{padding:10px 12px;font-size:.95rem}
+.hint{font-size:.85rem}
+.links a{display:inline-block;margin:0 12px 8px 0}
+</style>
+</head>
+<body>
+<main>
+<h1>Ball Screw Designer — настольная версия</h1>
+<p>Скриншоты приложения для Windows (PySide6). Анализ STEP-моделей, 3D и инерционный анализ работают только в настольной
+версии; расчёт и подбор ШВП доступен в <a href="./">веб-версии</a>. Значения — пример на тестовой сборке, сгенерированной
+программой; J ротора задан для проверки, не из каталога двигателя.</p>
+<p class="links"><a href="./">Открыть веб-версию</a> <a href="screens/report_example.pdf">Пример отчёта PDF</a></p>
+<p class="hint">Изображения можно увеличить: нажмите на картинку, откроется в полном размере.</p>
+<figure><a href="screens/3_inertia.png"><img src="screens/3_inertia.png" alt="Инерционный анализ привода" loading="lazy"></a>
+<figcaption><b>Инерционный анализ привода.</b> Детали STEP-сборки с типом движения, материалом, осью и i = ω_m/ω_k;
+J нагрузки 9,49 кг·см², J ротора 1,5 кг·см², K_J = 6,33 : 1, статус по заданному пределу 10 : 1.</figcaption></figure>
+<figure><a href="screens/2_step_selection.png"><img src="screens/2_step_selection.png" alt="Подбор по STEP-модели" loading="lazy"></a>
+<figcaption><b>Подбор ШВП по STEP-модели.</b> Роли деталей, разрез, измерение зазора гайка–стол, модель гайки кандидата
+и итоговый статус (инженерный + геометрический).</figcaption></figure>
+<figure><a href="screens/1_manual.png"><img src="screens/1_manual.png" alt="Ручной расчёт" loading="lazy"></a>
+<figcaption><b>Ручной расчёт и подбор.</b> Исходные данные в блоках, таблица кандидатов HIWIN и KR со статусами,
+проверки с формулами и источниками.</figcaption></figure>
+<figure><a href="screens/4_web_mobile.png"><img src="screens/4_web_mobile.png" alt="Веб-версия на телефоне" loading="lazy" style="max-width:390px;margin:auto"></a>
+<figcaption><b>Веб-версия</b> на экране телефона.</figcaption></figure>
+</main>
+</body>
+</html>
