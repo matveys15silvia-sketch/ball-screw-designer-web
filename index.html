@@ -155,7 +155,7 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
 <div class="wrap">
   <header class="top">
     <div class="brand">
-      <span class="eyebrow">ШВП · подбор по HIWIN BS-08-2-EN-1704-K / DIN ISO 3408</span>
+      <span class="eyebrow">ШВП · HIWIN (DIN ISO 3408) и KR Automation (CSK)</span>
       <h1>Ball Screw Designer</h1>
       <span class="muted small" id="dbline"></span>
     </div>
@@ -201,7 +201,7 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
   <footer>
     <div><b>Статусы:</b> ✔ Подходит — все обязательные проверки пройдены без замечаний; ◐ Условно подходит — пройдены, но есть допущения или сомнительные данные; ? Недостаточно данных — обязательную проверку выполнить нельзя; ✖ Не подходит — нарушено ограничение.</div>
     <div>Веб-версия считает тем же расчётным ядром, что и настольная программа (порт на JavaScript, совпадение проверяется автоматически на всех позициях базы). PDF-отчёт, сохранение файлов проекта, импорт изделий и графики запасов в отдельной вкладке есть в настольной версии. Исходные данные этой страницы сохраняются только в вашем браузере.</div>
-    <div>Расчёт предварительный. Сравнение с официальным калькулятором HIWIN не выполнялось. Не учитываются опорные подшипники, тепловое удлинение, радиальные нагрузки, длина цапф. Каталог 2017 года — значения подтверждайте у производителя.</div>
+    <div>Расчёт предварительный. Сравнение с официальным калькулятором HIWIN не выполнялось. Для KR/CSK диаметр по дну резьбы оценён как d − Dw (в каталоге не указан). Опоры проверяются только при заданных характеристиках; тепловое удлинение и радиальные нагрузки не учитываются. Анализ STEP-моделей — в настольной версии. Значения каталогов подтверждайте у производителя.</div>
   </footer>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -225,7 +225,17 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
       ["moving_mass_kg", "Масса перемещаемого узла", "кг", false],
       ["process_force_N", "Технологическая сила (на подаче)", "Н", true],
       ["friction_coefficient", "Коэффициент трения направляющих μ", "", true],
-      ["guide_resistance_N", "Сопротивление уплотнений", "Н", true]]],
+      ["guide_resistance_N", "Сопротивление уплотнений", "Н", true],
+      ["hours_per_day", "Часов работы в сутки", "ч", true],
+      ["days_per_year", "Дней работы в году", "дн", true]]],
+    ["Силы резания (заданы вручную)", false, [
+      ["cutting__axial_max_N", "Осевая сила резания, максимальная", "Н", true],
+      ["cutting__axial_mean_N", "Осевая сила резания, средняя", "Н", true],
+      ["cutting__radial_N", "Поперечная составляющая 1", "Н", true],
+      ["cutting__tangential_N", "Поперечная составляющая 2", "Н", true],
+      ["cutting__utilization", "Доля подачи под макс. силой (0…1)", "", false],
+      ["cutting__screw_share", "Доля осевой силы на ШВП k (0…1)", "", false],
+      ["cutting__external_process_N", "Прочие осевые технологические силы", "Н", true]]],
     ["Кинематика и цикл", true, [
       ["stroke_mm", "Полезный ход", "мм", false],
       ["rapid_speed_m_min", "Быстрое перемещение", "м/мин", false],
@@ -235,7 +245,12 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
       ["dwell_time_s", "Стоянка в цикле", "с", false]]],
     ["Опоры и геометрия", true, [
       ["unsupported_length_mm", "Свободная длина винта ls", "мм", false],
-      ["thread_margin_mm", "Запас длины резьбы (перебеги)", "мм", false]]],
+      ["thread_margin_mm", "Запас длины резьбы (перебеги)", "мм", false],
+      ["bearing_span_mm", "Расстояние между опорами", "мм", true],
+      ["available_total_length_mm", "Доступная общая длина винта", "мм", true],
+      ["end_journals_length_mm", "Длина концов вала вне опор", "мм", true],
+      ["bearing_fixed__allowable_axial_N", "Неподвижная опора: допустимая осевая нагрузка", "Н", true],
+      ["bearing_fixed__stiffness_N_um", "Неподвижная опора: осевая жёсткость", "Н/мкм", true]]],
     ["Ресурс и запасы", true, [
       ["required_life_h", "Требуемый ресурс", "ч", false],
       ["operating_factor_fp", "Коэффициент условий работы fp", "", false],
@@ -255,13 +270,24 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
       ["required_v300p_um", "Допустимое отклонение хода v300p", "мкм", true],
       ["required_rigidity_N_um", "Требуемая осевая жёсткость ШВП", "Н/мкм", true],
       ["max_nut_diameter_mm", "Макс. диаметр гайки/фланца", "мм", true],
-      ["max_nut_length_mm", "Макс. длина гайки", "мм", true]]],
+      ["max_nut_length_mm", "Макс. длина гайки", "мм", true],
+      ["max_axial_deflection_um", "Допустимая осевая деформация", "мкм", true]]],
     ["Фильтр каталога", false, [
       ["diameter_min_mm", "Диаметр от", "мм", true], ["diameter_max_mm", "Диаметр до", "мм", true],
       ["lead_min_mm", "Шаг от", "мм", true], ["lead_max_mm", "Шаг до", "мм", true]]],
   ];
+  const SELECTS = ["orientation", "mounting", "reliability_percent", "cycle_mode", "cutting__mode", "cutting__direction", "nut_type_pref"];
+  const getPath = (o, k) => k.split("__").reduce((x, part) => (x === null || x === undefined ? x : x[part]), o);
+  function setPath(o, k, v) {
+    const parts = k.split("__");
+    let x = o;
+    parts.slice(0, -1).forEach((part) => { x[part] = Object.assign({}, x[part] || {}); x = x[part]; });
+    x[parts[parts.length - 1]] = v;
+  }
+  let BASE = null;   // исходные данные целиком: поля, которых нет в веб-форме (массы, типы опор…), сохраняются
   const LABELS = {};
   GROUPS.forEach((gr) => gr[2].forEach((f) => (LABELS[f[0]] = f[1])));
+  const MANUFACTURERS = [...new Set(PRODUCTS.map((p) => p.manufacturer))].sort();
   const MFG = { rolled: "накатанные", peeled: "точёные", ground: "шлифованные" };
   const STATUS_CLASS = { "Подходит": "st-ok", "Условно подходит": "st-cond", "Недостаточно данных": "st-nodata", "Не подходит": "st-bad" };
   const CHECK_CLASS = { "пройдено": "st-ok", "пройдено с замечанием": "st-cond", "не пройдено": "st-bad", "не проверено": "st-nodata", "справочно": "st-info" };
@@ -289,6 +315,13 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
       fields.forEach((f) => (h += fieldHtml(...f)));
       if (title === "Ресурс и запасы")
         h += selectHtml("reliability_percent", "Надёжность (табл. 3.17)", Object.entries(BSDc.RELIABILITY_FACTORS).map(([k, v]) => [k, `${k} % (fr = ${v})`]));
+      if (title === "Силы резания (заданы вручную)") {
+        h += selectHtml("cutting__mode", "Учёт сил резания", [["none", "Не учитывать"], ["manual", "Учитывать заданные силы"]]);
+        h += selectHtml("cutting__direction", "Направление осевой силы", [["against", "Против подачи"], ["along", "По направлению подачи"], ["alternating", "Знакопеременная"]]);
+        h += `<p class="muted small wide" style="margin:0">Оценка сил по режиму резания (модель Кинцле) доступна в настольной версии. Поперечные силы увеличивают трение направляющих (μ·F⊥).</p>`;
+      }
+      if (title === "Требования")
+        h += selectHtml("nut_type_pref", "Тип гайки", [["any", "Любая"], ["single", "Одинарная"], ["double", "Двойная (с натягом)"]]);
       if (title === "Кинематика и цикл") {
         h += selectHtml("cycle_mode", "Цикл движения", [["auto", "Автоматический"], ["manual", "Ручной (таблица фаз)"]]);
         h += `<div id="phase-editor" hidden><div class="phase-wrap"><table class="phases"><thead><tr><th>Фаза</th><th>Напр.</th><th>v нач, м/мин</th><th>v кон, м/мин</th><th>t, с</th><th>F тех, Н</th><th></th></tr></thead><tbody id="phase-body"></tbody></table></div>
@@ -298,6 +331,8 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
       if (title === "Фильтр каталога") {
         h += `<div class="field wide"><span class="muted small">Исполнение</span><div class="checks-row">` +
           Object.entries(MFG).map(([k, t]) => `<label><input type="checkbox" name="mfg" value="${k}" checked> ${t}</label>`).join("") + `</div></div>`;
+        h += `<div class="field wide"><span class="muted small">Производитель (каждое изделие считается по методике своего каталога)</span><div class="checks-row">` +
+          MANUFACTURERS.map((m) => `<label><input type="checkbox" name="manuf" value="${esc(m)}" checked> ${esc(m)}</label>`).join("") + `</div></div>`;
       }
       h += `</div></details>`;
     });
@@ -342,32 +377,38 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
 
   function setInput(inp) {
     inp = BSDc.normalizeInput(inp);
+    BASE = JSON.parse(JSON.stringify(inp));
     $("#f_name").value = inp.name || "";
-    ["orientation", "mounting", "reliability_percent", "cycle_mode"].forEach((k) => ($(`#f_${k}`).value = String(inp[k])));
+    SELECTS.forEach((k) => ($(`#f_${k}`).value = String(getPath(inp, k))));
     Object.keys(LABELS).forEach((k) => {
-      const el = $(`#f_${k}`);
-      el.value = inp[k] === null || inp[k] === undefined ? "" : g(inp[k]);
+      const el = $(`#f_${k}`), v = getPath(inp, k);
+      el.value = v === null || v === undefined ? "" : g(v);
       el.removeAttribute("aria-invalid");
     });
     document.querySelectorAll('input[name="mfg"]').forEach((cb) => (cb.checked = !inp.manufacturing_types.length || inp.manufacturing_types.includes(cb.value)));
+    document.querySelectorAll('input[name="manuf"]').forEach((cb) => (cb.checked = !inp.manufacturers.length || inp.manufacturers.includes(cb.value)));
     setPhases(inp.manual_phases);
     $("#phase-editor").hidden = inp.cycle_mode !== "manual";
   }
   function getInput() {
     const errors = [];
-    const inp = { name: $("#f_name").value.trim() || "Ось", orientation: $("#f_orientation").value, mounting: $("#f_mounting").value,
-      reliability_percent: Number($("#f_reliability_percent").value), cycle_mode: $("#f_cycle_mode").value };
+    const inp = JSON.parse(JSON.stringify(BASE || BSDc.normalizeInput({})));
+    inp.name = $("#f_name").value.trim() || "Ось";
+    SELECTS.forEach((k) => setPath(inp, k, $(`#f_${k}`).value));
+    inp.reliability_percent = Number(inp.reliability_percent);
     Object.keys(LABELS).forEach((k) => {
       const v = parseNum($(`#f_${k}`).value);
       if (Number.isNaN(v)) errors.push([k, `«${LABELS[k]}»: «${$(`#f_${k}`).value}» не является числом`]);
-      inp[k] = Number.isNaN(v) ? null : v;
+      setPath(inp, k, Number.isNaN(v) ? null : v);
     });
     const phases = readPhases(inp.cycle_mode === "manual" ? errors : []);
     inp.manual_phases = phases;
     const mfg = [...document.querySelectorAll('input[name="mfg"]:checked')].map((c) => c.value);
     if (!mfg.length) errors.push(["mfg", "Не выбрано ни одного исполнения ШВП"]);
     inp.manufacturing_types = mfg.length === 3 ? [] : mfg;
-    inp.manufacturers = [];
+    const man = [...document.querySelectorAll('input[name="manuf"]:checked')].map((c) => c.value);
+    if (!man.length) errors.push(["manuf", "Не выбрано ни одного производителя"]);
+    inp.manufacturers = man.length === MANUFACTURERS.length ? [] : man;
     return { inp, errors };
   }
 
@@ -442,7 +483,7 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
     $("#assume-count").textContent = `${r.assumptions.length}${nCrit ? `, влияют на статус: ${nCrit}` : ""}`;
     $("#assume").innerHTML = r.assumptions.map((a) => `<li class="${isCritical(a) ? "crit" : ""}">${isCritical(a) ? "◐ " : ""}${esc(a)}</li>`).join("");
   }
-  function isCritical(a) { return /принята равной 0 Н|трение принято равным 0/.test(a); }
+  function isCritical(a) { return /равн(ой|ыми) 0 Н|трение принято равным 0|оценены по режиму/.test(a); }
   function renderCycle(r, cand) {
     $("#cycle-chart").innerHTML = stepChart(cycleSeries(r, cand), { aria: "График цикла: скорость, осевая сила и момент по времени" });
     $("#phase-table").innerHTML = `<thead><tr><th>Фаза</th><th>Напр.</th><th>t, с</th><th>v, м/мин</th><th>путь, мм</th><th>Fa, Н</th></tr></thead><tbody>` +
@@ -493,16 +534,20 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
   function candBody(c) {
     const p = c.product, v = c.values, s = p.source || {};
     const reasons = c.reasons.length ? `<ul>${c.reasons.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p>Все обязательные проверки пройдены.</p>`;
-    const life = "life_h" in v ? `<p class="small"><b>Ресурс:</b> Fbm1 = ${fmt(v.fbm1_N)} Н, Fbm2 = ${fmt(v.fbm2_N)} Н; с учётом надёжности ${fmt(v.life_km)} км, ${fmt(v.life_h)} ч работы в цикле (${fmt(v.life_motion_h)} ч движения); nm = ${v.nm_rpm.toFixed(1)} об/мин` +
-      (v.c_required_N ? `; требуемая Cdyn ≈ ${fmt(v.c_required_N)} Н` : "") + `.</p>` : "";
+    const method = v.method === "csk" ? "CSK / KR Automation (каталог, стр. E-12…E-35)" : "HIWIN BS-08-2-EN-1704-K / DIN ISO 3408";
+    const loadTxt = v.method === "csk" ? `Fm = ${fmt(v.fm_N)} Н (Fm·fw = ${fmt(v.fbm1_N)} Н)` : `Fbm1 = ${fmt(v.fbm1_N)} Н, Fbm2 = ${fmt(v.fbm2_N)} Н`;
+    const life = "life_h" in v ? `<p class="small"><b>Ресурс:</b> ${loadTxt}; с учётом надёжности ${fmt(v.life_km)} км, ${fmt(v.life_h)} ч работы в цикле (${fmt(v.life_motion_h)} ч движения); nm = ${v.nm_rpm.toFixed(1)} об/мин` +
+      (v.c_required_N ? `; требуемая Cdyn ≈ ${fmt(v.c_required_N)} Н` : "") + ("life_years" in v ? `; ≈ ${v.life_years.toFixed(1)} лет` : "") + `.</p>` : "";
     const drive = `<p class="small"><b>Привод:</b> пиковый момент ${v.torque_peak_Nm.toFixed(2)} Н·м, RMS ${v.torque_rms_Nm.toFixed(2)} Н·м, мощность ${fmt(v.power_peak_W)} Вт, приведённая инерция ${v.j_total_motor_kgm2.toExponential(3)} кг·м².</p>`;
     const checks = `<div class="tbl-wrap"><table class="checks"><thead><tr><th>Состояние</th><th>Проверка</th><th>Значение / пояснение</th></tr></thead><tbody>` +
       c.checks.map((k) => `<tr><td><span class="chip ${CHECK_CLASS[k.state]}">${CHECK_SYM[k.state]} ${esc(k.state)}</span></td>` +
         `<td>${esc(k.title)}${k.mandatory ? " <span class=\"muted small\">(обяз.)</span>" : ""}</td>` +
-        `<td>${esc(checkText(k))}${k.reference ? `<div class="muted small">${esc(k.reference)}</div>` : ""}</td></tr>`).join("") + `</tbody></table></div>`;
+        `<td>${esc(checkText(k))}${k.formula || k.substitution ? `<div class="small"><code>${esc([k.formula, k.substitution].filter(Boolean).join("; "))}</code></div>` : ""}` +
+        `${k.reference ? `<div class="muted small">${esc(k.reference)}</div>` : ""}</td></tr>`).join("") + `</tbody></table></div>`;
     const notes = (p.data_warnings || []).map((w) => `<li><b>⚠ ${esc(w)}</b></li>`).concat((p.notes || []).map((n) => `<li>${esc(n)}</li>`)).join("");
     return `<div class="cand-body"><div><b>Основание статуса</b>${reasons}</div>
-      <p class="small muted">${esc(p.nut_form)}. dk = ${fmt(p.root_diameter_mm, 2)} мм, шарик ${p.ball_diameter_mm ? g(p.ball_diameter_mm) + " мм" : "—"}, жёсткость гайки ${fmt(p.nut_rigidity_N_um)} Н/мкм, зазор ${p.max_axial_play_mm === null ? "—" : g(p.max_axial_play_mm) + " мм"}, длина гайки ${fmt(p.nut_length_mm)} мм, фланец ${fmt(p.flange_diameter_mm)} мм.</p>
+      <p class="small"><b>Методика:</b> ${esc(method)}. Статус данных: ${esc(p.verification_status)}.</p>
+      <p class="small muted">${esc(p.nut_form)}. ${v.root_is_estimate ? `dr ≈ ${fmt(v.root_diameter_mm, 2)} мм (оценка d − Dw, в каталоге нет)` : `dk = ${fmt(p.root_diameter_mm, 2)} мм`}, шарик ${p.ball_diameter_mm ? g(p.ball_diameter_mm) + " мм" : "—"}, жёсткость гайки ${fmt(p.nut_rigidity_N_um)} Н/мкм, зазор ${p.max_axial_play_mm === null ? "—" : g(p.max_axial_play_mm) + " мм"}, длина гайки ${fmt(p.nut_length_mm)} мм, фланец ${fmt(p.flange_diameter_mm)} мм.</p>
       ${life}${drive}<div>${utilBars(c)}</div>${checks}
       <div class="small"><b>Источник данных:</b> ${esc(s.document || "")}, ${esc(s.table || "")}${s.page ? `, стр. ${s.page}` : ""}${s.accessed ? `, проверено ${esc(s.accessed)}` : ""}. ${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">PDF каталога</a>` : ""}</div>
       ${notes ? `<ul class="small">${notes}</ul>` : ""}
@@ -553,22 +598,22 @@ footer { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px;
     }
   }
   function projectJson(inp) {
-    return JSON.stringify({ format: "ball-screw-designer-project", version: 1, saved: new Date().toISOString().slice(0, 19), notes: "Создано в веб-версии", input: inp }, null, 2);
+    return JSON.stringify({ format: "ball-screw-designer-project", version: 2, saved: new Date().toISOString().slice(0, 19), notes: "Создано в веб-версии", input: inp }, null, 2);
   }
   function csv(r) {
-    const head = ["Статус", "Производитель", "Серия", "Артикул", "d, мм", "P, мм", "dk, мм", "C, Н", "C0, Н", "n max, об/мин", "S0", "Ресурс, км", "Ресурс, ч", "Момент пик, Н·м", "Причины / замечания"];
+    const head = ["Статус", "Методика", "Производитель", "Серия", "Артикул", "d, мм", "P, мм", "dk, мм", "C, Н", "C0, Н", "n max, об/мин", "S0", "Ресурс, км", "Ресурс, ч", "Момент пик, Н·м", "Причины / замечания"];
     const num = (x, nd) => (x === null || x === undefined ? "" : !isFinite(x) ? "inf" : x.toFixed(nd).replace(".", ","));
     const q = (s) => `"${String(s).replace(/"/g, '""')}"`;
     return [head.join(";")].concat(r.candidates.map((c) => { const p = c.product, v = c.values;
-      return [c.status, p.manufacturer, p.series, p.article, num(p.nominal_diameter_mm, 0), num(p.lead_mm, 2), num(p.root_diameter_mm, 3),
+      return [c.status, (v.method || "").toUpperCase(), p.manufacturer, p.series, p.article, num(p.nominal_diameter_mm, 0), num(p.lead_mm, 2), num(v.root_diameter_mm, 3),
         num(p.dynamic_load_N, 0), num(p.static_load_N, 0), num(v.n_max_rpm, 0), num(v.s0, 2), num(v.life_km, 0), num(v.life_h, 0),
         num(v.torque_peak_Nm, 3), q(c.summary)].join(";"); })).join("\n");
   }
 
   // ---------- запуск ----------
   buildForm();
-  $("#dbline").textContent = `База: ${PRODUCTS.length} позиций HIWIN с источником и страницей каталога. ` +
-    ((DB.sources || []).some((s) => /недоступен/.test(s.status || "")) ? "KR Automation: сайт был недоступен, данные не включены." : "");
+  $("#dbline").textContent = `База: ${PRODUCTS.length} позиций (` + MANUFACTURERS.map((m) => `${m} — ${PRODUCTS.filter((p) => p.manufacturer === m).length}`).join(", ") +
+    `) с источником и страницей каталога. Методики HIWIN и CSK/KR не взаимозаменяемы — каждое изделие считается по своей.`;
   Object.entries(EXAMPLES).forEach(([k, v]) => { const o = document.createElement("option"); o.value = k; o.textContent = v.input.name; $("#example").appendChild(o); });
   const firstExample = Object.values(EXAMPLES)[0];
   setInput(load() || (firstExample ? firstExample.input : BSDc.DEFAULT_INPUT));

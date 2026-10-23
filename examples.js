@@ -1,7 +1,7 @@
 /* Сгенерировано tools/build_web.py из examples/*.bsd.json — не редактировать. */
 window.BSD_EXAMPLES = {
  "vertical_z_axis.bsd.json": {
-  "notes": "Демонстрационные исходные данные.",
+  "notes": "Демонстрационные исходные данные (не измерены на реальном станке); характеристики опор — условные значения примера, не каталог подшипников.",
   "input": {
    "name": "Пример: вертикальная ось Z",
    "orientation": "vertical",
@@ -45,11 +45,24 @@ window.BSD_EXAMPLES = {
    "diameter_min_mm": null,
    "diameter_max_mm": null,
    "lead_min_mm": null,
-   "lead_max_mm": null
+   "lead_max_mm": null,
+   "bearing_fixed": {
+    "kind": "angular_contact_pair",
+    "count": 2,
+    "arrangement": "DB",
+    "allowable_axial_N": 6000
+   },
+   "bearing_other": {
+    "kind": "deep_groove",
+    "count": 1
+   },
+   "bearing_span_mm": 750,
+   "hours_per_day": 16,
+   "days_per_year": 250
   }
  },
  "vmc_x_axis.bsd.json": {
-  "notes": "Демонстрационные исходные данные (не измерены на реальном станке).",
+  "notes": "Демонстрационные исходные данные (не измерены на реальном станке); характеристики опор — условные значения примера, не каталог подшипников.",
   "input": {
    "name": "Пример: ось X вертикально-фрезерного станка",
    "orientation": "horizontal",
@@ -91,7 +104,20 @@ window.BSD_EXAMPLES = {
    "diameter_min_mm": null,
    "diameter_max_mm": null,
    "lead_min_mm": null,
-   "lead_max_mm": null
+   "lead_max_mm": null,
+   "bearing_fixed": {
+    "kind": "angular_contact_pair",
+    "count": 2,
+    "arrangement": "DB",
+    "allowable_axial_N": 9000
+   },
+   "bearing_other": {
+    "kind": "deep_groove",
+    "count": 1
+   },
+   "bearing_span_mm": 1150,
+   "hours_per_day": 16,
+   "days_per_year": 250
   }
  }
 };
